@@ -89,6 +89,15 @@ class Paciente(Personas):
     def registrar_ingreso(self, ingreso):
         if ingreso not in self._historial_ingresos:
             self._historial_ingresos.append(ingreso)
+
+    def historial_ingresos(self):
+        if not self._historial_ingresos:
+            return f"{self.get_nombre()} no tiene ingresos registrados"
+        texto = f"Historial de ingresos de {self.get_nombre()}:\n"
+        for ingreso in self._historial_ingresos:
+            texto += (f"- {ingreso.get_codigo()} | {ingreso.get_fecha_ingreso()} | "
+                      f"{ingreso.get_motivo_ingreso()} | {ingreso.get_estado().value}\n")
+        return texto
         
     def mostrar_informacion(self):
         return ("Tipo: Paciente\n"
