@@ -1,5 +1,5 @@
 # Excepciones personalizadas del sistema de hospitalización.
-# Todas heredan de HsopitalError, así en el programa principal se pueden 
+# Todas heredan de HospitalError, así en el programa principal se pueden 
 # capturar una por una o todas juntas.
 
 class HospitalError(Exception):
@@ -17,6 +17,6 @@ class CapacidadHabitacionError(HospitalError):
     pass
 
 
-class
+class PersonaDuplicadaError(Hospital Error):
     """Se lanza cuando se intenta registrar una persona con una identificación que ya existe"""
     pass
