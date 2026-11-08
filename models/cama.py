@@ -32,7 +32,7 @@ class Cama:
     def esta_disponible(self):
         return self.get_estado() == EstadoCama.disponible
 
-        def ocupar(self):
+    def ocupar(self):
         # La cama solo se puede ocupar si está disponible
         if not self.esta_disponible():
             raise CamaNoDisponibleError(f"La cama {self.get_codigo()} no está disponible "
