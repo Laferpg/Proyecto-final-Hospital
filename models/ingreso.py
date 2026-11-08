@@ -117,11 +117,12 @@ class Ingreso:
         return self._cama 
     
     def set_cama(self, cama:Cama):
-        if not cama.esta_disponible():
-            print(f"Error: La cama {cama.get_codigo()} ya está ocupada")
+        if cama.esta_disponible():
+            self._cama = cama
+            cama.set_estado(EstadoCama.ocupada)
+            print(f"Cama {cama.get_codigo()} asignada con éxito al ingreso {self._codigo}")
+        else:
+            print(f"La cama {cama.get_codigo()} ya está ocupada")
         
-        self._cama = cama
-        cama.set_estado(EstadoCama.ocupada)
-        print(f"Cama {cama.get_codigo()} asignada con éxito al ingreso {self._codigo}")
         
     
