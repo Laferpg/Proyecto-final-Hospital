@@ -1,5 +1,6 @@
 from models.paciente import Paciente
-from models.cama import Cama, EstadoCama
+from models.cama import Cama
+from models.salida import Salida
 from enum import Enum
 
 class EstadoIngreso(Enum):
@@ -9,7 +10,7 @@ class EstadoIngreso(Enum):
 class Ingreso:
     
     def __init__(self, paciente, codigo, fecha_ingreso, motivo_ingreso, escala_dolor, estado_conciencia, requiere_aislamiento,
-                 riesgo_caida, diagnostico, estado, cama):
+                 riesgo_caida, diagnostico, cama):
         self.set_paciente(paciente)
         self.set_codigo(codigo)
         self.set_fecha_ingreso(fecha_ingreso)
@@ -19,8 +20,9 @@ class Ingreso:
         self.set_requiere_aislamiento(requiere_aislamiento)
         self.set_riesgo_caida(riesgo_caida)
         self.set_diagnostico(diagnostico)
-        self.set_estado(estado)
+        self.set_estado(EstadoIngreso.activo)   
         self.set_cama(cama)
+        self._salida = None   
         self._paciente.registrar_ingreso(self)
     
     def get_paciente(self):
@@ -117,12 +119,35 @@ class Ingreso:
         return self._cama 
     
     def set_cama(self, cama:Cama):
-        if cama.esta_disponible():
-            self._cama = cama
-            cama.set_estado(EstadoCama.ocupada)
-            print(f"Cama {cama.get_codigo()} asignada con éxito al ingreso {self._codigo}")
-        else:
-            print(f"La cama {cama.get_codigo()} ya está ocupada")
+        if not isinstance(cama, Cama):
+            raise ValueError("La cama debe ser un objeto existente")
+        cama.ocupar()
+        self._cama = cama
+        print(f"Cama {cama.get_codigo()} asignada con éxito al ingreso {self._codigo}")
         
-        
+    def get_salida(self):
+        return self._salida
     
+    def dar_alta(self, fecha_salida, tipo_salida, diagnostico_final, indicaciones):
+        if self.get_estado() == EstadoIngreso.de_alta:
+            raise ValueError(f"El ingreso {self.get_codigo()} ya fue dado de alta")
+        self._salida = Salida(fecha_salida, tipo_salida, diagnostico_final, indicaciones)
+        self.set_estado(EstadoIngreso.de_alta)
+        self._cama.liberar()
+        return self._salida
+    
+    def mostrar_informacion(self):
+        texto = (f"Ingreso {self.get_codigo()}\n"
+                 f"Paciente: {self.get_paciente().get_nombre()}\n"
+                 f"Fecha de ingreso: {self.get_fecha_ingreso()}\n"
+                 f"Motivo: {self.get_motivo_ingreso()}\n"
+                 f"Escala de dolor: {self.get_escala_dolor()}/10\n"
+                 f"Estado de conciencia: {self.get_estado_conciencia()}\n"
+                 f"Requiere aislamiento: {'Sí' if self.get_requiere_aislamiento() else 'No'}\n"
+                 f"Riesgo de caída: {'Sí' if self.get_riesgo_caida() else 'No'}\n"
+                 f"Diagnóstico: {self.get_diagnostico()}\n"
+                 f"Cama: {self.get_cama().get_codigo()}\n"
+                 f"Estado: {self.get_estado().value}")
+        if self._salida is not None:
+            texto += "\n" + self._salida.mostrar_informacion()
+        return texto
