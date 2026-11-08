@@ -1,7 +1,7 @@
 
 from models.medico import Medico
 from models.paciente import Paciente
-from models.enfermero import Enfermero
+from models.enfermero import Enfermero, Turno
 
 class PersonaController:
     
@@ -23,7 +23,7 @@ class PersonaController:
         paciente=Paciente(identificacion, nombre, correo, historia_cLinica, fecha_naciemiento, genero, eps)
         self.personas.append(paciente)
         
-    def añadir_enfermero(self, identificacion, nombre, correo, Idempleado, turno):
+    def añadir_enfermero(self, identificacion, nombre, correo, Idempleado, turno:Turno):
         enfermero=Enfermero(identificacion, nombre, correo, Idempleado, turno)
         self.personas.append(enfermero)
         

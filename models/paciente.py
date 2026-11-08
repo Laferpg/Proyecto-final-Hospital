@@ -2,8 +2,8 @@ from models.personas import Personas
 
 class Paciente(Personas):
     
-    def __init__(self, identificacion, nombre, correo, historia_cLinica, fecha_nacimiento, genero, tipo_sangre, alergias,antecedentes_personales, antecedentes_familiares, eps):
-              super().__init__(identificacion, nombre, correo)
+    def __init__(self, identificacion, nombre, correo, num_celular, historia_cLinica, fecha_nacimiento, genero, tipo_sangre, alergias,antecedentes_personales, antecedentes_familiares, eps):
+              super().__init__(identificacion, nombre, correo, num_celular)
               self.set_historia_clinica(historia_cLinica)
               self.set_fecha_nacimiento(fecha_nacimiento)
               self.set_genero(genero)
@@ -98,6 +98,6 @@ class Paciente(Personas):
                 f"EPS: {self.get_eps()}")
 
     def obtener_rol(self):
-        return f"{self.get_nombre} es un paciente"
+        return "Paciente"
         
         

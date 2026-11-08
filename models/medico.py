@@ -3,18 +3,18 @@ from models.especialidad import Especialidad
 
 class Medico(Personas):
     
-    def __init__(self, identificacion, nombre, correo, codigo, estado, especialidad):
-              super().__init__(identificacion, nombre, correo)
-              self.set_codigo(codigo)
+    def __init__(self, identificacion, nombre, correo, num_celular, codigo_empleado, estado, especialidad):
+              super().__init__(identificacion, nombre, correo, num_celular)
+              self.set_codigo_empleado(codigo_empleado)
               self.set_estado(estado)
               self.set_especialidad(especialidad)
     
-    def get_codigo(self):
-            return self._codigo
+    def get_codigo_empleado(self):
+            return self._codigo_empleado
         
-    def set_codigo (self, codigo):
-        if(codigo.strip() != ""):
-            self._codigo = codigo 
+    def set_codigo_empleado(self, codigo_empleado):
+        if(codigo_empleado.strip() != ""):
+            self._codigo_empleado = codigo_empleado
         else: 
             raise ValueError("El código del Médico no puede ser vacío")
         
@@ -39,10 +39,10 @@ class Medico(Personas):
     def mostrar_informacion(self):
             return ("Tipo: Médico\n"
                     f"{super().mostrar_informacion()}\n"
-                    f"Código: {self.get_codigo()}\n"
+                    f"Código de empleado: {self.get_codigo_empleado()}\n"
                     f"Estado: {self.get_estado()}\n"
-                    f"Especialidad: {self.get_especialidad()}\n")
+                    f"Especialidad: {self.get_especialidad().get_nombre()}\n")
             
     def obtener_rol(self):
-        return f"{self.get_nombre} es médico"
+        return "Médico"
     
