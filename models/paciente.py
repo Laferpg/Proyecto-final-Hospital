@@ -97,7 +97,7 @@ class Paciente(Personas):
                 f"Antecedentes familiares: {self.antecedentes_familiares()}\n"
                 f"eps: {self.get_eps()}")
 
-    def obtener_rol(self)
+    def obtener_rol(self):
         return "Paciente"
         
         
