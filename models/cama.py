@@ -1,4 +1,5 @@
 from enum import Enum
+from models.excepciones import CamaNoDisponibleError
 
 class EstadoCama(Enum):
     ocupada = "Ocupada"
@@ -30,6 +31,22 @@ class Cama:
         
     def esta_disponible(self):
         return self.get_estado() == EstadoCama.disponible
+
+        def ocupar(self):
+        # La cama solo se puede ocupar si está disponible
+        if not self.esta_disponible():
+            raise CamaNoDisponibleError(f"La cama {self.get_codigo()} no está disponible "
+                                        f"(estado actual: {self.get_estado().value})")
+        self.set_estado(EstadoCama.ocupada)
+        
+    def liberar(self):
+        # Al dar de alta al paciente la cama vuelve a quedar disponible
+        self.set_estado(EstadoCama.disponible)
+        
+    def mostrar_informacion(self):
+        return f"Cama {self.get_codigo()} - {self.get_estado().value}"
+
+
         
 
 
