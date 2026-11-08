@@ -8,6 +8,7 @@ class ZonaController:
     def añadir_zona (self, nombre, piso):
         zona = Zona (nombre, piso)
         self.zonas.append(zona)
+        return zona
         
     def get_zonas(self):
         return self.zonas.copy()
