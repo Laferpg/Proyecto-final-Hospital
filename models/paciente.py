@@ -12,6 +12,7 @@ class Paciente(Personas):
               self.set_antecedentes_personales(antecedentes_personales)
               self.set_antecedentes_familiares(antecedentes_familiares)
               self.set_eps(eps)
+              self._historial_ingresos = []
         
     def get_historia_clinica(self):
         return self._historia_clinica
@@ -84,6 +85,10 @@ class Paciente(Personas):
     
     def get_eps(self):
         return self._eps
+    
+    def registrar_ingreso(self, ingreso):
+        if ingreso not in self._historial_ingresos:
+            self._historial_ingresos.append(ingreso)
         
     def mostrar_informacion(self):
         return ("Tipo: Paciente\n"
