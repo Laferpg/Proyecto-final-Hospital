@@ -1,5 +1,6 @@
 from enum import Enum
 from models.cama import Cama, EstadoCama
+from models.excepciones import CapacidadHabitacionError
 
 class EstadoHabitacion(Enum):
     disponible = "Disponible"
@@ -42,7 +43,7 @@ class Habitacion:
             
     def agregar_cama(self, codigo, estado:EstadoCama):
         if len(self._camas) >= self.get_capacidad_camas():
-            raise ValueError(f"La habitación {self.get_num_habitacion()} ya alcanzó su "
+            raise CapacidadHabitacionError(f"La habitación {self.get_num_habitacion()} ya alcanzó su "
                                 f"capacidad de {self.get_capacidad_camas()} cama(s)")
         cama = Cama(codigo, estado)
         self._camas.append(cama)
@@ -67,7 +68,7 @@ class Habitacion:
             texto += f"- Cama {u.get_codigo()} \n"
         return texto
 
-    def mostrar_info(self):
+    def mostrar_informacion(self):
         return (f"Habitación: \n"
                 f"Número de habitación: {self.get_num_habitacion()}\n"
                 f"Capacidad de camas: {self.get_capacidad_camas()}\n"
