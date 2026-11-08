@@ -17,6 +17,6 @@ class CapacidadHabitacionError(HospitalError):
     pass
 
 
-class PersonaDuplicadaError(Hospital Error):
+class PersonaDuplicadaError(HospitalError):
     """Se lanza cuando se intenta registrar una persona con una identificación que ya existe"""
     pass
