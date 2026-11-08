@@ -11,7 +11,7 @@ class Enfermero(Personas):
             return self._Idempleado
         
     def set_Idempleado (self, Idempleado):
-        if(Idempleado != ""):
+        if(Idempleado.strip() != ""):
             self._Idempleado = Idempleado 
         else: 
             raise ValueError("EL Idempleado del enfermero no puede ser vacío")
@@ -20,15 +20,18 @@ class Enfermero(Personas):
             return self._turno
         
     def set_turno (self, turno):
-        if(turno != ""):
+        if(turno.strip() != ""):
             self._turno = turno 
         else: 
             raise ValueError("EL turno del enfermero no puede ser vacío")
             
     def mostrar_informacion(self):
-            return ("Tipo: Medico\n"
+            return ("Tipo: Enfermero\n"
                     f"{super().mostrar_informacion()}\n"
-                    f"Idempleado: {self.get_Idempleado()}\n"
+                    f"Id de empleado: {self.get_Idempleado()}\n"
                     f"turno: {self.get_turno()}\n")
+    
+    def obtener_rol(self):
+        return f"{self.get_nombre} es enfermero(a)"
 
     

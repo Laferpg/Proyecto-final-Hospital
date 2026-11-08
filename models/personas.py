@@ -1,4 +1,6 @@
-class Personas:
+from abc import ABC, abstractmethod
+
+class Personas(ABC):
     def __init__(self, identificacion, nombre, correo,):
         self.set_identificacion(identificacion)
         self.set_nombre(nombre)
@@ -8,7 +10,7 @@ class Personas:
         return self._identificacion
     
     def set_identificacion (self, identificacion):
-        if(identificacion != ""):
+        if(identificacion.strip() != ""):
             self._identificacion = identificacion 
         else: 
             raise ValueError("La identificación de la persona no puede ser vacía")
@@ -17,7 +19,7 @@ class Personas:
         return self._nombre
         
     def set_nombre (self, nombre):
-        if(nombre != ""):
+        if(nombre.strip() != ""):
             self._nombre = nombre
         else: 
             raise ValueError("El nombre de la persona no puede ser vacío")
@@ -31,8 +33,13 @@ class Personas:
         else: 
             raise ValueError("El correo de la persona no puede ser vacío")
         
+    @abstractmethod
     def mostrar_informacion(self):
         return (f"Identificación: {self.get_identificacion()}\n"
                 f"Nombre: {self.get_nombre()}\n"
                 f"Correo: {self.get_correo()}")
+        
+    @abstractmethod
+    def obtener_rol(self):
+        """cada clase hija sobrescribe su rol"""
 

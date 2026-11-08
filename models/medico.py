@@ -37,9 +37,12 @@ class Medico(Personas):
             raise ValueError("La especialidad del Médico debe ser un objeto válido")
             
     def mostrar_informacion(self):
-            return ("Tipo: Medico\n"
+            return ("Tipo: Médico\n"
                     f"{super().mostrar_informacion()}\n"
-                    f"Codigo: {self.get_codigo()}\n"
+                    f"Código: {self.get_codigo()}\n"
                     f"Estado: {self.get_estado()}\n"
                     f"Especialidad: {self.get_especialidad()}\n")
+            
+    def obtener_rol(self):
+        return f"{self.get_nombre} es médico"
     
