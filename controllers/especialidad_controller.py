@@ -8,6 +8,7 @@ class EspecialidadController:
     def añadir_especialidad(self, codigo, nombre):
         especialidad = Especialidad(codigo, nombre)
         self._especialidades.append(especialidad)
+        return especialidad
         
     def get_especialidades(self):
         return self._especialidades.copy()
