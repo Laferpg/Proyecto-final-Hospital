@@ -47,4 +47,5 @@ class Zona:
             texto += f"- Habitación {h.get_num_habitacion()}: {h.mostrar_camas_libres()}\n"
         return texto
     
-    
+    def agregar_habitacion_existente(self, habitacion):
+        self._habitaciones.append(habitacion)
