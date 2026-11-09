@@ -11,12 +11,10 @@ def agregar(
             persona_controller,
             especialidad_controller,
             ingreso_controller,
-            zona_controller,
-            cama_controller,
-            habitacion_controller
+            zona_controller
 ):
     while True:
-        print("\nQue elemento desea reguistar en el sistema")
+        print("\nQué elemento desea registar en el sistema")
         print("1. Registrar especialidad")
         print("2. Registrar médico")
         print("3. Registrar enfermero")
@@ -105,7 +103,7 @@ def agregar(
                 print("Zona registrada correctamente.")
             
             case "6":
-                print("\nREGISTRO HABITACION")
+                print("\nREGISTRO HABITACIÓN")
                 zonas = zona_controller.get_zonas()
                 if not zonas:
                     print("Primero debe registrar al menos una zona.")
@@ -199,14 +197,12 @@ def agregar(
             
 def buscar(
         persona_controller,
-        zona_controller,
-        habitacion_controller,
-        cama_controller
+        zona_controller
 ):
 
     while True:
 
-        print("\nQue desea buscar")
+        print("\nQué desea buscar")
         print("1. Buscar una persona")
         print("2. Buscar zonas")
         print("3. Buscar una habitación")
@@ -288,14 +284,12 @@ def menu_principal(
     persona_controller,
     especialidad_controller,
     ingreso_controller,
-    zona_controller,
-    cama_controller,
-    habitacion_controller
+    zona_controller
     
 ):
     
     while True:
-       print("\n Bienvenido a su sistema de gestion de piso de Hospitalización")
+       print("\n Bienvenido a su sistema de gestión de piso de Hospitalización")
        print("\n Seleccione la funcion desea realizar")
        print("1. Reguistro" )
        print("2. Dar de alta")
@@ -313,9 +307,7 @@ def menu_principal(
                             persona_controller,
                             especialidad_controller,
                             ingreso_controller,
-                            zona_controller,
-                            cama_controller,
-                            habitacion_controller
+                            zona_controller
                            )
                      
                      case "2":
@@ -325,9 +317,7 @@ def menu_principal(
                      case "3":
                         buscar(
                             persona_controller,
-                            zona_controller,
-                            habitacion_controller,
-                            cama_controller
+                            zona_controller
                             )
                 
                      case "4":
