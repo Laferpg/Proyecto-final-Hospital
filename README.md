@@ -81,7 +81,7 @@ Se capturan con `try/except` en el menú y en la demostración, se muestra un me
 
 ## Diagrama UML y documento
 - Diagrama de clases: ver la carpeta `docs/`.
-- Documento de Decisiones de Diseño: ver la carpeta `docs/`.
+- Documento de Decisiones de Diseño: https://canva.link/up6z5inun8np5ah
 
 ## Uso de inteligencia artificial
 El uso de herramientas de inteligencia artificial se declara en el Documento de Decisiones de Diseño.
