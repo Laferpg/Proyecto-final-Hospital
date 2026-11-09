@@ -1,4 +1,5 @@
 from models.habitacion import Habitacion, EstadoHabitacion
+from models.excepciones import CapacidadHabitacionError
 
 
 class HabitacionController:
@@ -19,8 +20,5 @@ class HabitacionController:
     def get_habitaciones(self):
         return self._habitaciones.copy()
 
-    def buscar_habitacion(self, numero):
-        for habitacion in self._habitaciones:
-            if habitacion.get_num_habitacion() == numero:
-                return habitacion
-        return None
+    
+    

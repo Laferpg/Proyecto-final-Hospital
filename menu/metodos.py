@@ -1,5 +1,8 @@
 from models.paciente import Paciente
 from models.salida import TipoSalida
+from models.excepciones import CamaNoDisponibleError
+from models.cama import EstadoCama
+
 
 def elegir_especialidad(lista):
 
@@ -25,17 +28,17 @@ def buscar_zona(zonas, nombre):
             return zona
     return None
 
-def buscar_habitacion(habitaciones, numero):
-    for habitacion in habitaciones:
-        if habitacion.get_num_habitacion() == numero:
-            return habitacion
-    return None
+def buscar_cama(self, codigo):
+        for cama in self._camas:
+            if cama.get_codigo() == codigo:
+                return cama
+        return None
 
-def buscar_cama(camas, codigo):
-    for cama in camas:
-        if cama.get_codigo() == codigo:
-            return cama
-    return None    
+def buscar_habitacion(self, numero):
+        for habitacion in self._habitaciones:
+            if habitacion.get_num_habitacion() == numero:
+                return habitacion
+        return None
 
 def registrar_ingreso(persona_controller,
                       zona_controller,
@@ -65,8 +68,24 @@ def registrar_ingreso(persona_controller,
     print("\nCAMAS DISPONIBLES")
     for i, cama in enumerate(camas_disponibles, start=1):
         print(f"{i}. {cama.get_codigo()}")
-    opcion_cama = int(input("Seleccione cama: ")) - 1
-    cama = camas_disponibles[opcion_cama]
+        
+    try:
+        opcion_cama = int(input("Seleccione cama: ")) - 1
+        if opcion_cama < 0 or opcion_cama >= len(camas_disponibles):
+            print("Opción de cama inválida.")
+            return
+        cama = camas_disponibles[opcion_cama]
+
+        
+        if cama.get_estado() != EstadoCama.disponible:
+            raise CamaNoDisponibleError(f"La cama {cama.get_codigo()} ya no se encuentra disponible.")
+            
+    except ValueError:
+        print("Debe ingresar un número válido.")
+        return
+    except CamaNoDisponibleError as e:
+        print(f"\n[Error]: {e}")
+        return
     
     codigo = input("Código de ingreso: ")
     fecha_ingreso = input("Fecha de ingreso: ")

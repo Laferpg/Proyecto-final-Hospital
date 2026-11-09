@@ -14,11 +14,6 @@ class CamaController:
     def get_camas(self):
         return self._camas.copy()
 
-    def buscar_cama(self, codigo):
-        for cama in self._camas:
-            if cama.get_codigo() == codigo:
-                return cama
-        return None
     
     def camas_disponibles(self):
         return [

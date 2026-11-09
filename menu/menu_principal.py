@@ -1,9 +1,8 @@
 from models.enfermero import Turno
 from models.habitacion import EstadoHabitacion
 from models.cama import EstadoCama
-from menu.metodos import registrar_ingreso,buscar_persona,buscar_zona,buscar_cama,buscar_habitacion,elegir_especialidad
-from menu.metodos import dar_alta_paciente, registrar_ingreso
-from models.excepciones import PersonaDuplicadaError
+from models.excepciones import PersonaDuplicadaError, CapacidadHabitacionError
+from menu.metodos import (registrar_ingreso, buscar_persona, buscar_zona, buscar_habitacion, buscar_cama, elegir_especialidad, dar_alta_paciente)
 
 
 def agregar(
@@ -24,6 +23,7 @@ def agregar(
         print("6. Registrar habitación")
         print("7. Registrar cama")
         print("8. Registrar ingreso")
+        print("9. Volver al menu anterior")
         
         option = input("Selecciona una opción: ")
         
@@ -104,29 +104,40 @@ def agregar(
             
             case "6":
                 print("\nREGISTRO HABITACION")
-                if not habitacion_controller.get_habitaciones():
-                    print("Primero debe registrar al menos una zona")
-                    
-                    for i, zona in enumerate(zonas, start=1):
-                            print(f"{i}. {zona.get_nombre()}")
-                            
-                            opcion_zona = int(
-                            input("Seleccione la zona: ")) - 1
-                            zona = zonas[opcion_zona]
-                            continue
+                zonas = zona_controller.get_zonas()
+                if not zonas:
+                    print("Primero debe registrar al menos una zona.")
+                    continue
+                
+                print("Seleccione la zona para la habitación:")
+                for i, zona in enumerate(zonas, start=1):
+                    print(f"{i}. {zona.get_nombre()}")
+                
+                try:
+                    opcion_zona = int(input("Seleccione el número de la zona: ")) - 1
+                    if opcion_zona < 0 or opcion_zona >= len(zonas):
+                        print("Opción inválida.")
+                        continue
+                    zona = zonas[opcion_zona]
+                except ValueError:
+                    print("Debe ingresar un número válido.")
+                    continue
+
                 num_habitacion = int(input("Número de habitación: "))
                 capacidad_camas = int(input("Capacidad camas: "))
                 print("1. Disponible")
                 print("2. Ocupada")
                 print("3. Mantenimiento")
                 op_estado = input("Seleccione estado: ")
+                
                 if op_estado == "1":
                     estado = EstadoHabitacion.disponible
                 elif op_estado == "2":
                     estado = EstadoHabitacion.ocupada
                 else:
                     estado = EstadoHabitacion.mantenimiento
-                habitacion_controller.añadir_habitacion(num_habitacion, capacidad_camas, estado)
+                
+                habitacion = habitacion_controller.añadir_habitacion(num_habitacion, capacidad_camas, estado)
                 zona.agregar_habitacion_existente(habitacion)
                 print("Habitación registrada correctamente.")
                 
@@ -135,41 +146,54 @@ def agregar(
                 habitaciones = habitacion_controller.get_habitaciones()
                 
                 if not habitaciones:
-                    print("Primero debe registrar una habitación")
+                    print("Primero debe registrar una habitación.")
                     continue
                 
+                print("Seleccione la habitación:")
                 for i, habitacion in enumerate(habitaciones, start=1):
-                    print(f"{i}. Habitación "
-                          f"{habitacion.get_num_habitacion()}")
-                    opcion = int(
-                        input("Seleccione la habitación: ")) - 1
-                    
-                    habitacion = habitaciones[opcion]
-                    codigo = input("Código cama: ")
-                    print("\nEstado de la cama")
-                    print("1. Disponible")
-                    print("2. Ocupada")
-                    print("3. Mantenimiento")
-                    op = input("Seleccione estado: ")
-                    if op == "1":
-                        estado = EstadoCama.disponible
-                    elif op == "2":
-                        estado = EstadoCama.ocupada
-                    elif op == "3":
-                        estado = EstadoCama.mantenimiento
-                    else:
-                        print("Opción inválida")
+                    print(f"{i}. Habitación {habitacion.get_num_habitacion()}")
+                
+                try:
+                    opcion = int(input("Ingrese el número de la habitación: ")) - 1
+                    if opcion < 0 or opcion >= len(habitaciones):
+                        print("Opción inválida.")
                         continue
-                    
+                    habitacion = habitaciones[opcion]
+                except ValueError:
+                    print("Debe ingresar un número válido.")
+                    continue
+
+                codigo = input("Código cama: ")
+                print("\nEstado de la cama")
+                print("1. Disponible")
+                print("2. Ocupada")
+                print("3. Mantenimiento")
+                op = input("Seleccione estado: ")
+                
+                if op == "1":
+                    estado = EstadoCama.disponible
+                elif op == "2":
+                    estado = EstadoCama.ocupada
+                elif op == "3":
+                    estado = EstadoCama.mantenimiento
+                else:
+                    print("Opción inválida.")
+                    continue
+                
+                try:
                     habitacion.agregar_cama(codigo, estado)
-                    
                     cama_controller.agregar_cama(codigo, estado)
                     print("Cama registrada correctamente.")
+                except CapacidadHabitacionError as e:
+                    print(f"La habitacion seleccionada ya no tiene mas disponiblidad de camas")
             
             case "8":
                 print("\nREGISTRO DE INGRESO A PISO DE HOSPITALIZACION")
                 
                 registrar_ingreso(persona_controller, zona_controller, ingreso_controller)
+            
+            case "9":
+              return
             
 def buscar(
         persona_controller,
@@ -252,7 +276,7 @@ def buscar(
                     print("Cama no encontrada")
 
             case "5":
-                break
+                return
 
             case _:
                 print("Opción inválida")
