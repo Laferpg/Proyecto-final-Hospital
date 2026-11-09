@@ -28,17 +28,42 @@ def buscar_zona(zonas, nombre):
             return zona
     return None
 
-def buscar_cama(self, codigo):
-        for cama in self._camas:
-            if cama.get_codigo() == codigo:
-                return cama
-        return None
+def buscar_cama(camas, codigo):
+    for cama in camas:
+        if cama.get_codigo() == codigo:
+            return cama
+    return None
 
-def buscar_habitacion(self, numero):
-        for habitacion in self._habitaciones:
-            if habitacion.get_num_habitacion() == numero:
-                return habitacion
-        return None
+def buscar_habitacion(habitaciones, numero):
+    for habitacion in habitaciones:
+        if habitacion.get_num_habitacion() == numero:
+            return habitacion
+    return None
+
+def todas_las_habitaciones(zona_controller):
+    # Las habitaciones viven dentro de su zona (composición), por eso se recorren las zonas
+    habitaciones = []
+    for zona in zona_controller.get_zonas():
+        habitaciones.extend(zona.get_habitaciones())
+    return habitaciones
+
+def todas_las_camas(zona_controller):
+    # Las camas viven dentro de su habitación (composición)
+    camas = []
+    for habitacion in todas_las_habitaciones(zona_controller):
+        camas.extend(habitacion.get_camas())
+    return camas
+
+def mostrar_personas(persona_controller):
+    # Polimorfismo: una sola lista con médicos, enfermeros y pacientes,
+    # un único ciclo y los mismos métodos para todos, sin preguntar el tipo
+    personas = persona_controller.get_persona()
+    if not personas:
+        print("No hay personas registradas.")
+        return
+    for persona in personas:
+        print(f"\n>>> Rol: {persona.obtener_rol()}")
+        print(persona.mostrar_informacion())
 
 def registrar_ingreso(persona_controller,
                       zona_controller,
