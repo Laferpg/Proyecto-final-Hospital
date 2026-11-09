@@ -1,8 +1,10 @@
 from models.enfermero import Turno
 from models.habitacion import EstadoHabitacion
 from models.cama import EstadoCama
-from models.excepciones import PersonaDuplicadaError, CapacidadHabitacionError
-from menu.metodos import (registrar_ingreso, buscar_persona, buscar_zona, buscar_habitacion, buscar_cama, elegir_especialidad, dar_alta_paciente)
+from models.excepciones import PersonaDuplicadaError, CapacidadHabitacionError, HospitalError
+from menu.metodos import (registrar_ingreso, buscar_persona, buscar_zona, buscar_habitacion, buscar_cama, elegir_especialidad, dar_alta_paciente,
+                          todas_las_habitaciones, todas_las_camas, mostrar_personas)
+from demostracion import ejecutar_demostracion
 
 
 def agregar(
@@ -137,13 +139,13 @@ def agregar(
                 else:
                     estado = EstadoHabitacion.mantenimiento
                 
-                habitacion = habitacion_controller.añadir_habitacion(num_habitacion, capacidad_camas, estado)
-                zona.agregar_habitacion_existente(habitacion)
+                # Composición: la zona crea la habitación dentro de ella
+                zona.agregar_habitacion(num_habitacion, capacidad_camas, estado)
                 print("Habitación registrada correctamente.")
                 
             case "7":
                 print("\nREGISTRO CAMA")
-                habitaciones = habitacion_controller.get_habitaciones()
+                habitaciones = todas_las_habitaciones(zona_controller)
                 
                 if not habitaciones:
                     print("Primero debe registrar una habitación.")
@@ -181,8 +183,8 @@ def agregar(
                     continue
                 
                 try:
+                    # Composición: la habitación crea la cama dentro de ella
                     habitacion.agregar_cama(codigo, estado)
-                    cama_controller.agregar_cama(codigo, estado)
                     print("Cama registrada correctamente.")
                 except CapacidadHabitacionError as e:
                     print(f"La habitacion seleccionada ya no tiene mas disponiblidad de camas")
@@ -250,7 +252,7 @@ def buscar(
                     input("Ingrese el número de habitación: "))
 
                 habitacion = buscar_habitacion(
-                    habitacion_controller.get_habitaciones(),numero
+                    todas_las_habitaciones(zona_controller),numero
                 )
 
                 if habitacion:
@@ -265,7 +267,7 @@ def buscar(
                 codigo = input("Ingrese el código de la cama: ")
 
                 cama = buscar_cama(
-                    cama_controller.get_camas(),codigo
+                    todas_las_camas(zona_controller),codigo
                 )
 
                 if cama:
@@ -298,7 +300,9 @@ def menu_principal(
        print("1. Reguistro" )
        print("2. Dar de alta")
        print("3. Buscar")
-       print("4. Salir")
+       print("4. Mostrar personas registradas")
+       print("5. Ejecutar demostración del sistema")
+       print("6. Salir")
        
        
        option = input("Selecciona una opción: ")
@@ -327,10 +331,18 @@ def menu_principal(
                             )
                 
                      case "4":
+                        mostrar_personas(persona_controller)
+                     
+                     case "5":
+                        ejecutar_demostracion()
+                
+                     case "6":
                         print("Vuelve pronto")
                         break
                 
                      case _:
                         print("Opción inválida")
+       except HospitalError as error:
+                print(f"Error: {error}")
        except ValueError as error:
                 print(f"Dato inválido: {error}. No se guardaron los cambios.")
